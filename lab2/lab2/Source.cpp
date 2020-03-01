@@ -97,7 +97,19 @@ void sort_teams(vector<football_team>& teams) {
 		teams[i + 1] = key;
 	}
 }
-
+void print_teams(const string& filename, vector<football_team>& teams) {
+	ofstream out(filename);
+	if (out.is_open()) {
+		for (size_t i = 0; i < teams.size(); ++i) {
+			out << i + 1 << ". ";
+			out << teams[i];
+		}
+		out.close();
+	}
+	else {
+		cerr << "Can not open file" + filename;
+	}
+}
 int main()
 {
 	string directory;
@@ -106,5 +118,6 @@ int main()
 	auto teams = parsing(files);
 	calculate_result_to_all(teams);
 	sort_teams(teams);
+	print_teams("result.csv", teams);
 	return 0;
 }
