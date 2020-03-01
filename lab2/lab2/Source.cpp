@@ -72,11 +72,39 @@ vector<football_team> parsing(vector<path>& paths) {
 	}
 	return teams;
 }
+
+void calculate_result(football_team& team) {
+	for (auto i = 0; i < games_amount; ++i) {
+		team.result += team.matches[i].own > team.matches[i].other ? 3 :
+			team.matches[i].own == team.matches[i].other ? 1 : 0;
+	}
+}
+
+void calculate_result_to_all(vector<football_team>& teams) {
+	for (auto& team : teams) {
+		calculate_result(team);
+	}
+}
+
+void sort_teams(vector<football_team>& teams) {
+	for (auto j = 1; j < teams.size(); ++j) {
+		const auto key = teams[j];
+		auto i = j - 1;
+		while (i >= 0 && teams[i].result < key.result) {
+			teams[i + 1] = teams[i];
+			--i;
+		}
+		teams[i + 1] = key;
+	}
+}
+
 int main()
 {
 	string directory;
 	getline(cin, directory);
 	auto files = input(directory);
 	auto teams = parsing(files);
+	calculate_result_to_all(teams);
+	sort_teams(teams);
 	return 0;
 }
