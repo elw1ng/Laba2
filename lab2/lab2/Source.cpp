@@ -52,10 +52,31 @@ vector<path> input(const string& directory) {
 	return files;
 }
 
+vector<football_team> parsing(vector<path>& paths) {
+	vector<football_team> teams;
+	for (auto& filename : paths) {
+		ifstream in(filename);
+		if (in.is_open()) {
+			int amount;
+			in >> amount;
+			for (auto i = 0; i < amount; ++i) {
+				football_team team;
+				in >> team;
+				teams.push_back(team);
+			}
+			in.close();
+		}
+		else {
+			throw runtime_error("Can not open file" + filename.string());
+		}
+	}
+	return teams;
+}
 int main()
 {
 	string directory;
 	getline(cin, directory);
 	auto files = input(directory);
+	auto teams = parsing(files);
 	return 0;
 }
